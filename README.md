@@ -16,7 +16,7 @@ Each Buildkite job gets a fresh macOS VM that is automatically created before th
 steps:
   - command: "make test"
     plugins:
-      - getmac/getmac#v1.0.0:
+      - getmac-io/getmac#v1.0.0:
           project-id: "2f8aa35f-b1d7-4425-bb26-889dfe92cb53"
 ```
 
@@ -73,7 +73,7 @@ steps:
   - label: ":mac: Build & Test"
     command: "swift test"
     plugins:
-      - getmac/getmac#v1.0.0:
+      - getmac-io/getmac#v1.0.0:
           project-id: "2f8aa35f-b1d7-4425-bb26-889dfe92cb53"
           image: "macos-tahoe"
           machine-type: "mac-m4-c4-m8"
