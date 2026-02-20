@@ -9,7 +9,7 @@ configuration:
   properties:
     image:
       type: string
-      default: "macos-sequoia"
+      default: "macos-tahoe"
     machine-type:
       type: string
       default: "mac-m4-c4-m8"

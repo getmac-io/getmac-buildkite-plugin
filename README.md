@@ -30,7 +30,7 @@ Your GetMac Cloud project ID.
 
 ### Optional
 
-#### `image` (string, default: `macos-sequoia`)
+#### `image` (string, default: `macos-tahoe`)
 
 The macOS image to use for the VM.
 
@@ -75,7 +75,7 @@ steps:
     plugins:
       - getmac/getmac#v1.0.0:
           project-id: "2f8aa35f-b1d7-4425-bb26-889dfe92cb53"
-          image: "macos-sequoia"
+          image: "macos-tahoe"
           machine-type: "mac-m4-c4-m8"
           region: "eu-central-ltu-1"
 ```
