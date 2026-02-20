@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/shared.bash
+source "${DIR}/../lib/shared.bash"
+
+if [[ -z "${GETMAC_CLOUD_API_KEY:-}" ]]; then
+  echo "Error: GETMAC_CLOUD_API_KEY environment variable is not set" >&2
+  exit 1
+fi
+
+getmac_log "Looking up VM: ${GETMAC_VM_NAME}"
+
+vm_json=$(get_vm_by_name)
+if [[ -z "${vm_json}" ]]; then
+  echo "Error: VM '${GETMAC_VM_NAME}' not found" >&2
+  exit 1
+fi
+
+vm_id=$(echo "${vm_json}" | jq -r '.id')
+getmac_log "Connecting to VM ${vm_id} via SSH..."
+
+ssh -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    -o LogLevel=ERROR \
+    -i "${GETMAC_SSH_PRIVATE_KEY_PATH}" \
+    -p 22 \
+    "${vm_id}@ssh.getmac.io" \
+    "${BUILDKITE_COMMAND}"

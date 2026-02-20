@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/shared.bash
+source "${DIR}/../lib/shared.bash"
+
+if [[ -z "${GETMAC_CLOUD_API_KEY:-}" ]]; then
+  echo "Warning: GETMAC_CLOUD_API_KEY not set, skipping VM cleanup" >&2
+  exit 0
+fi
+
+getmac_log "Cleaning up VM: ${GETMAC_VM_NAME}"
+
+vm_json=$(get_vm_by_name)
+if [[ -z "${vm_json}" ]]; then
+  getmac_log "VM not found, nothing to clean up"
+  exit 0
+fi
+
+vm_id=$(echo "${vm_json}" | jq -r '.id')
+getmac_log "Deleting VM: ${vm_id}"
+
+delete_vm "${vm_id}" > /dev/null
+
+getmac_log "VM deleted successfully"

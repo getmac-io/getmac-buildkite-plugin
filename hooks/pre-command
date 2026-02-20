@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euo pipefail
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/shared.bash
+source "${DIR}/../lib/shared.bash"
+
+if [[ -z "${GETMAC_CLOUD_API_KEY:-}" ]]; then
+  echo "Error: GETMAC_CLOUD_API_KEY environment variable is not set" >&2
+  exit 1
+fi
+
+if [[ -z "${GETMAC_PROJECT_ID}" ]]; then
+  echo "Error: project-id plugin parameter is required" >&2
+  exit 1
+fi
+
+getmac_log "Creating GetMac VM: ${GETMAC_VM_NAME}"
+getmac_log "Image: ${GETMAC_IMAGE} | Type: ${GETMAC_MACHINE_TYPE} | Region: ${GETMAC_REGION}"
+
+response=$(create_vm)
+
+vm_id=$(echo "${response}" | jq -r '.id // empty')
+if [[ -z "${vm_id}" ]]; then
+  echo "Error: Failed to create VM. API response:" >&2
+  echo "${response}" >&2
+  exit 1
+fi
+
+getmac_log "VM created: ${vm_id}"
+getmac_log "Waiting 30s for the VM to boot up..."
+sleep 30
+
+export GETMAC_VM_ID="${vm_id}"

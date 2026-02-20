@@ -1,0 +1,30 @@
+name: GetMac
+description: Provision ephemeral macOS VMs on GetMac Cloud for Buildkite jobs
+author: https://github.com/getmac-io
+requirements:
+  - curl
+  - jq
+  - ssh
+configuration:
+  properties:
+    image:
+      type: string
+      default: "macos-sequoia"
+    machine-type:
+      type: string
+      default: "mac-m4-c4-m8"
+    region:
+      type: string
+      default: "eu-central-ltu-1"
+    project-id:
+      type: string
+    ssh-private-key-path:
+      type: string
+    api-url:
+      type: string
+      default: "https://api.getmac.io/v1"
+    debug:
+      type: boolean
+      default: false
+  required:
+    - project-id
