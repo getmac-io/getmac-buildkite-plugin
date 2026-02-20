@@ -43,7 +43,7 @@ getmac_api() {
     -X "${method}" \
     -H "Authorization: Bearer ${GETMAC_CLOUD_API_KEY}" \
     -H "Content-Type: application/json" \
-    "${@}" \
+    "${@:+$@}" \
     "${url}")
 
   local exit_code=$?
